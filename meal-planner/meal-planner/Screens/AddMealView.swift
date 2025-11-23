@@ -86,7 +86,7 @@ struct AddMealView: View {
             .navigationTitle("Add Meal")
             .background(
                 LinearGradient(
-                    gradient: Gradient(colors: [Color(.systemBlue).opacity(0.8), Color(.systemTeal)]),
+                    gradient: Gradient(colors: [Color(.black), Color(.systemTeal)]),
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
                 )
