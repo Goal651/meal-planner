@@ -1,9 +1,3 @@
-//
-//  Home.swift
-//  meal-planner
-//
-//  Created by wigothehacker on 11/23/25.
-//
 import SwiftUI
 
 struct HomeView: View {
@@ -11,55 +5,83 @@ struct HomeView: View {
     @State private var showAddMeal = false
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 24) {
+        ZStack {
+            // Background gradient
+            LinearGradient(
+                gradient: Gradient(colors: [Color(.systemBlue).opacity(0.8), Color(.systemTeal)]),
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .edgesIgnoringSafeArea(.all)
             
-            Text("Hello, Goal 👋")
-                .font(.largeTitle)
-                .fontWeight(.bold)
-            
-            Text("Here are your meals for today")
-                .font(.subheadline)
-                .foregroundColor(.gray)
-            
-            HStack(spacing: 20) {
-                StatCard(title: "Meals", value: "\(mealVM.meals.count)", color: .green)
-                StatCard(title: "Calories", value: "\(mealVM.totalCalories())", color: .orange)
-                StatCard(title: "Water", value: "5 cups", color: .blue)
-            }
-            .padding(.vertical)
-            
-            Text("Today’s Meals")
-                .font(.headline)
-            
-            ScrollView {
-                VStack(spacing: 16) {
-                    ForEach(mealVM.meals) { meal in
-                        MealRow(name: meal.name, desc: "\(meal.calories) cal", color: .green)
-                    }
+            VStack(alignment: .leading, spacing: 24) {
+                // Greeting
+                Text("Hello, Goal 👋")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                
+                Text("Here are your meals for today")
+                    .font(.subheadline)
+                    .foregroundColor(.white.opacity(0.85))
+                
+                // Stat Cards
+                HStack(spacing: 16) {
+                    StatCard(title: "Meals", value: "\(mealVM.meals.count)", color: .blue)
+                    StatCard(title: "Calories", value: "\(mealVM.totalCalories())", color: .blue)
+                    StatCard(title: "Water", value: "5 cups", color: .blue)
                 }
-            }
-            
-            Spacer()
-            
-            Button(action: { showAddMeal = true }) {
-                Text("Add New Meal")
+                .padding(.vertical)
+                
+                // Today's Meals
+                Text("Today’s Meals")
                     .font(.headline)
                     .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
+                
+                ScrollView {
+                    VStack(spacing: 16) {
+                        ForEach(mealVM.meals) { meal in
+                            MealRow(
+                                name: meal.name,
+                                desc: "\(meal.calories) cal",
+                                color: .blue
+                            )
+                        }
+                    }
+                }
+                
+                Spacer()
+                
+                // Add Meal Button (blue themed + icon)
+                Button(action: { showAddMeal = true }) {
+                    HStack {
+                        Image(systemName: "plus.circle.fill")
+                            .font(.title2)
+                        Text("Add New Meal")
+                            .font(.headline)
+                            .fontWeight(.semibold)
+                    }
+                    .foregroundColor(.white)
                     .padding()
-                    .background(Color.green)
-                    .cornerRadius(12)
+                    .frame(maxWidth: .infinity)
+                    .background(
+                        LinearGradient(
+                            gradient: Gradient(colors: [Color(.systemBlue), Color(.blue)]),
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
+                    .cornerRadius(15)
+                    .shadow(color: Color.black.opacity(0.3), radius: 5, x: 0, y: 5)
+                }
+                .padding(.vertical)
+                .sheet(isPresented: $showAddMeal) {
+                    AddMealView()
+                        .environmentObject(mealVM)
+                }
             }
-            .sheet(isPresented: $showAddMeal) {
-                AddMealView()
-            }
-            
+            .padding()
         }
-        .padding()
     }
 }
-
-#Preview {
-    HomeView()
-        .environmentObject(MealViewModel())
-}
+ 

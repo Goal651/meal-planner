@@ -18,36 +18,95 @@ struct AddMealView: View {
     
     var body: some View {
         NavigationStack {
-            Form {
-                Section(header: Text("Meal Info")) {
-                    TextField("Meal Name", text: $mealName)
-                    TextField("Calories", text: $calories)
-                        .keyboardType(.numberPad)
+            VStack(spacing: 20) {
+                
+                // Form Fields
+                VStack(alignment: .leading, spacing: 15) {
+                    Text("Meal Name")
+                        .font(.subheadline)
+                        .foregroundColor(.white.opacity(0.85))
+                    TextField("Enter meal name", text: $mealName)
+                        .padding()
+                        .background(Color.white.opacity(0.1))
+                        .cornerRadius(10)
+                        .foregroundColor(.white)
                     
-                    Picker("Type", selection: $selectedType) {
+                    Text("Calories")
+                        .font(.subheadline)
+                        .foregroundColor(.white.opacity(0.85))
+                    TextField("Enter calories", text: $calories)
+                        .keyboardType(.numberPad)
+                        .padding()
+                        .background(Color.white.opacity(0.1))
+                        .cornerRadius(10)
+                        .foregroundColor(.white)
+                    
+                    Text("Type")
+                        .font(.subheadline)
+                        .foregroundColor(.white.opacity(0.85))
+                    Picker("Select type", selection: $selectedType) {
                         ForEach(types, id: \.self) { type in
                             Text(type)
                         }
                     }
+                    .pickerStyle(SegmentedPickerStyle())
+                    .background(Color.white.opacity(0.1))
+                    .cornerRadius(10)
                 }
-            }
-            .navigationTitle("Add Meal")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Save") {
-                        if let cal = Int(calories) {
-                            let meal = Meal(name: mealName, calories: cal, type: selectedType)
-                            mealVM.addMeal(meal)
-                            dismiss()
-                        }
+                .padding(.horizontal)
+                
+                Spacer()
+                
+                // Save Button (Blue + icon)
+                Button(action: saveMeal) {
+                    HStack {
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.title2)
+                        Text("Save Meal")
+                            .font(.headline)
+                            .fontWeight(.semibold)
                     }
+                    .foregroundColor(.white)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(
+                        LinearGradient(
+                            gradient: Gradient(colors: [Color(.systemBlue), Color(.blue)]),
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
+                    .cornerRadius(15)
+                    .shadow(color: Color.black.opacity(0.3), radius: 5, x: 0, y: 5)
                 }
+                .padding(.horizontal)
+                
             }
+            .padding()
+            .navigationTitle("Add Meal")
+            .background(
+                LinearGradient(
+                    gradient: Gradient(colors: [Color(.systemBlue).opacity(0.8), Color(.systemTeal)]),
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .edgesIgnoringSafeArea(.all)
+            )
         }
     }
-}
-
-#Preview {
-    AddMealView()
-        .environmentObject(MealViewModel())
+    
+    // MARK: - Functions
+    private func saveMeal() {
+        guard !mealName.isEmpty, let cal = Int(calories), cal > 0 else {
+            print("Invalid input")
+            return
+        }
+        let meal = Meal(name: mealName, calories: cal, type: selectedType)
+        mealVM.addMeal(meal)
+        // Clear inputs for next entry
+        mealName = ""
+        calories = ""
+        selectedType = "Breakfast"
+        dismiss()
+    }
 }
