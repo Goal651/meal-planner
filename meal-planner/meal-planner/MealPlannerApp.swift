@@ -8,10 +8,14 @@
 import SwiftUI
 
 @main
-struct meal_plannerApp: App {
+struct MealPlannerApp: App {
+    @StateObject private var mealVM = MealViewModel()
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(mealVM)
         }
     }
 }
+
