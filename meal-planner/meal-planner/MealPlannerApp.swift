@@ -15,6 +15,9 @@ struct MealPlannerApp: App {
         WindowGroup {
             ContentView()
                 .environmentObject(mealVM)
+                .task {
+                    await mealVM.loadMeals()
+                }
         }
     }
 }

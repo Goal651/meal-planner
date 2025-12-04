@@ -1,20 +1,34 @@
 //
-//  MealViewModel.swift
+//  MealFetcher.swift
 //  meal-planner
 //
-//  Created by wigothehacker on 11/23/25.
+//  Created by wigothehacker on 12/4/25.
 //
 
 import Foundation
+import SwiftUI
 
+@MainActor
 class MealViewModel: ObservableObject {
-    @Published var meals: [Meal] = []
-    
-    func addMeal(_ meal: Meal) {
-        meals.append(meal)
+    @Published var meals: [MealItem] = []
+    private let service = MealService()
+    @Published var selectedCategory: MealCategory = .drinks
+
+
+    func loadMeals() async {
+        Task {
+            do {
+                meals = try await service.fetchMeals(for: selectedCategory)
+            } catch {
+                print("Error:", error)
+            }
+        }
+
     }
     
-    func totalCalories() -> Int {
-        meals.reduce(0) { $0 + $1.calories }
+    func updateCategory(data:MealCategory )async{
+        print(data)
+        selectedCategory=data
+        await loadMeals()
     }
 }

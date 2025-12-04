@@ -8,13 +8,14 @@
 import Foundation
 
 class MealService {
-    let baseURL = "https://free-food-menus-api-two.vercel.app/burgers"
+    let baseURL = "https://free-food-menus-api-two.vercel.app/"
 
-    func fetchMeals() async throws -> [MealItem] {
-        guard let url = URL(string: baseURL) else { return [] }
+    func fetchMeals(for category: MealCategory) async throws -> [MealItem] {
+        let fullURL = baseURL + category.rawValue
+        print(fullURL)
+        guard let url = URL(string: fullURL) else { return [] }
 
         let (data, _) = try await URLSession.shared.data(from: url)
-        
         return try JSONDecoder().decode([MealItem].self, from: data)
     }
 }
