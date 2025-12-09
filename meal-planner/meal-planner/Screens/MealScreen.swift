@@ -1,7 +1,7 @@
 import SwiftUI
 import Foundation
 
-struct RemoteMealsScreen: View {
+struct MealsScreen: View {
     @EnvironmentObject var mv: MealViewModel
 
     var body: some View {

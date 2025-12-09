@@ -12,7 +12,7 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             if showHome {
-                RemoteMealsScreen()
+                MealsScreen()
             } else {
                 WelcomeScreen(showHome: $showHome)
             }

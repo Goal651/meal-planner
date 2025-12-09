@@ -17,6 +17,8 @@ struct MealItem: Codable, Identifiable {
     let rate:Int
     let country:String
 }
+
+
 enum MealCategory: String, CaseIterable {
     case bbqs = "bbqs"
     case bestFoods = "best-foods"

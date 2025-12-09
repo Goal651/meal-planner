@@ -51,7 +51,7 @@ struct MealComponent: View {
                     .foregroundColor(.white)
                     .lineLimit(2)
                 
-                Text("\(meal.price) cal")
+                Text("$ \(meal.price)")
                     .font(.subheadline)
                     .foregroundColor(.gray)
                 
